@@ -19,10 +19,18 @@ export const useProfile = () => {
     profileRef.current = profile;
   }, [profile]);
 
+  // Track last loaded user ID to prevent unnecessary reloads
+  const lastLoadedUserIdRef = useRef<string | null>(null);
+
   // Load profile data
   const loadProfile = useCallback(async () => {
     if (!user) {
       setLoading(false);
+      return;
+    }
+
+    // Skip reload if we've already loaded for this user
+    if (lastLoadedUserIdRef.current === user.id && profile !== null) {
       return;
     }
 
@@ -44,6 +52,7 @@ export const useProfile = () => {
         setWorkExperienceEntries([]);
         setSignatureUrl(null);
         setLoading(false);
+        lastLoadedUserIdRef.current = user.id;
         return;
       }
 
@@ -66,13 +75,16 @@ export const useProfile = () => {
       if (profileData.signature_url) {
         setSignatureUrl(profileData.signature_url);
       }
+
+      // Mark this user as loaded
+      lastLoadedUserIdRef.current = user.id;
     } catch (err) {
       console.error('Error loading profile:', err);
       setError(err instanceof Error ? err.message : 'Failed to load profile');
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, profile]);
 
   useEffect(() => {
     if (authLoading) {
@@ -81,15 +93,20 @@ export const useProfile = () => {
     }
     
     if (user) {
-    loadProfile();
+      // Only load if user changed or profile hasn't been loaded yet
+      if (lastLoadedUserIdRef.current !== user.id || profile === null) {
+        loadProfile();
+      }
     } else {
+      // Reset when user logs out
+      lastLoadedUserIdRef.current = null;
       setProfile(null);
       setEducationEntries([]);
       setWorkExperienceEntries([]);
       setSignatureUrl(null);
       setLoading(false);
     }
-  }, [user, authLoading, loadProfile]);
+  }, [user, authLoading]); // Removed loadProfile from dependencies to prevent unnecessary reloads
 
 
   // Update profile function - updates state immediately (optimistic update), then saves to database
