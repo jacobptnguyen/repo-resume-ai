@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } from 'react';
+import { useState, useEffect, useImperativeHandle, forwardRef, useRef } from 'react';
 import { useProfile } from '../../hooks/useProfile';
 import { useAuth } from '../../hooks/useAuth';
 import { Input } from '../common/Input';
@@ -14,7 +14,7 @@ export interface EducationFormHandle {
 
 interface EducationFormProps {}
 
-export const EducationForm = forwardRef<EducationFormHandle, EducationFormProps>((props, ref) => {
+export const EducationForm = forwardRef<EducationFormHandle, EducationFormProps>((_props, ref) => {
   const { educationEntries, updateEducation } = useProfile();
   const { user } = useAuth();
   const [entries, setEntries] = useState<EducationEntry[]>([]);

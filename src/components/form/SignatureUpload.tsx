@@ -6,7 +6,7 @@ import { Button } from '../common/Button';
 import { Upload, Trash2 } from 'lucide-react';
 
 export const SignatureUpload: React.FC = () => {
-  const { signatureUrl, updateSignatureUrl, profile } = useProfile();
+  const { signatureUrl, updateSignatureUrl } = useProfile();
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 

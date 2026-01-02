@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { Settings, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 export const Header: React.FC = () => {

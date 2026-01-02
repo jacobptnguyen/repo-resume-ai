@@ -2,8 +2,6 @@ import { useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
 import type { GenerationRequest, GenerationResponse, SelectedProject, ExtractedSkills } from '../lib/types';
-import { resumeTemplate } from '../templates/resumeTemplate';
-import { coverLetterTemplate } from '../templates/coverLetterTemplate';
 import type { UserProfile, EducationEntry, WorkExperienceEntry } from '../lib/types';
 
 interface GenerationCache {
@@ -25,14 +23,14 @@ export const useGeneration = () => {
     frameworks: [],
     tools: [],
   });
-  const [cache, setCache] = useState<GenerationCache | null>(null);
+  const [_cache, setCache] = useState<GenerationCache | null>(null);
 
   const generate = useCallback(async (
     request: Omit<GenerationRequest, 'user_id'>,
-    profile: UserProfile,
-    educationEntries: EducationEntry[],
-    workExperienceEntries: WorkExperienceEntry[],
-    signatureUrl?: string | null
+    _profile: UserProfile,
+    _educationEntries: EducationEntry[],
+    _workExperienceEntries: WorkExperienceEntry[],
+    _signatureUrl?: string | null
   ) => {
     if (!user) {
       setError('User not authenticated');
@@ -65,7 +63,6 @@ export const useGeneration = () => {
           const exp = payload.exp;
           const iat = payload.iat;
           
-          tokenAge = iat ? Math.floor((now - iat) / 60) : null; // Age in minutes
           tokenExpired = exp ? now >= exp : false;
         }
       } catch (decodeError) {
