@@ -23,6 +23,11 @@ export const useAuth = () => {
   }, []);
 
   const signInWithGitHub = async () => {
+    // Uses dynamic window.location.origin - works in both dev and production
+    // IMPORTANT: Make sure to configure callback URLs in:
+    // 1. Supabase Dashboard → Authentication → Providers → GitHub → Redirect URL
+    // 2. GitHub OAuth App → Authorization callback URL
+    // Both should include: http://localhost:3000/auth/callback (dev) and https://your-app.vercel.app/auth/callback (production)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
