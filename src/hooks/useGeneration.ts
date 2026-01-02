@@ -92,11 +92,8 @@ export const useGeneration = () => {
       }
 
       // Call Vercel serverless function
-      // In development, use localhost:3000 (Vercel dev server)
-      // In production, use relative URL (same domain)
-      const apiUrl = window.location.hostname === 'localhost'
-        ? 'http://localhost:3000/api/generate-resume-and-cover-letter'
-        : '/api/generate-resume-and-cover-letter';
+      // Use relative path - works in both development (vercel dev) and production
+      const apiUrl = '/api/generate-resume-and-cover-letter';
 
       const response = await fetch(apiUrl, {
         method: 'POST',

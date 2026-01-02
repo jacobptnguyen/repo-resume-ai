@@ -64,11 +64,8 @@ export const SettingsPage: React.FC = () => {
 
       // Call the Vercel function to delete the account
       // The function handles: signature deletion, data deletion via RPC, and auth user deletion
-      // In development, use localhost:3000 (Vercel dev server)
-      // In production, use relative URL (same domain)
-      const apiUrl = window.location.hostname === 'localhost'
-        ? 'http://localhost:3000/api/delete-account'
-        : '/api/delete-account';
+      // Use relative path - works in both development (vercel dev) and production
+      const apiUrl = '/api/delete-account';
       
       const response = await fetch(apiUrl, {
         method: 'POST',
