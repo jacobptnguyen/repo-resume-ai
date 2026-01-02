@@ -2,7 +2,6 @@ import type { UserProfile } from '../lib/types';
 
 interface CoverLetterTemplateProps {
   profile: UserProfile;
-  jobDescription: string;
   coverLetterContent: string; // AI-generated content
   signatureUrl?: string | null;
   fontSize: number;
@@ -10,7 +9,6 @@ interface CoverLetterTemplateProps {
 
 export const coverLetterTemplate = ({
   profile,
-  jobDescription,
   coverLetterContent,
   signatureUrl,
   fontSize,

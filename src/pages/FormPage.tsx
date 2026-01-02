@@ -18,7 +18,7 @@ interface FieldErrors {
 
 export const FormPage: React.FC = () => {
   const navigate = useNavigate();
-  const { profile, educationEntries, loading, reloadProfile, updateProfile, signatureUrl } = useProfile();
+  const { profile, educationEntries, loading, updateProfile, signatureUrl } = useProfile();
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isValidating, setIsValidating] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);

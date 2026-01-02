@@ -105,7 +105,7 @@ export const SettingsPage: React.FC = () => {
       }
 
       // Parse JSON only if response is OK
-      const data = await response.json();
+      await response.json();
 
       // Account deleted successfully - clear local storage and redirect
       localStorage.clear();

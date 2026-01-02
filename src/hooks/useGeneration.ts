@@ -53,7 +53,6 @@ export const useGeneration = () => {
 
       // Step 1: Decode JWT payload to check expiry (don't verify signature, just decode)
       let tokenExpired = false;
-      let tokenAge = null;
       try {
         const tokenParts = session.access_token.split('.');
         if (tokenParts.length === 3) {
@@ -61,7 +60,6 @@ export const useGeneration = () => {
           const payload = JSON.parse(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')));
           const now = Math.floor(Date.now() / 1000);
           const exp = payload.exp;
-          const iat = payload.iat;
           
           tokenExpired = exp ? now >= exp : false;
         }
