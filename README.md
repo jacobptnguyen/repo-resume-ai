@@ -4,7 +4,7 @@ An AI-powered resume and cover letter generator that analyzes your GitHub reposi
 
 ## Live Demo
 
-🚀 **[Try It Out →](https://reporesume-ai.vercel.app/)**
+🚀 **[Try It Out →](https://repo-resume-ai-xj1p.vercel.app/)**
 
 ## Tech Stack
 
