@@ -1,9 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
-
-const dotenvResult1 = dotenv.config({ path: '.env.local' });
-const dotenvResult2 = dotenv.config({ path: '.env' });
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -335,7 +331,7 @@ function generateResumeHTML(profile: any, education: any[], work: any[], project
   return html.trim();
 }
 
-function generateCoverLetterHTML(profile: any, jobDesc: string, content: string, signatureUrl: string | null, fontSize: number): string {
+function generateCoverLetterHTML(profile: any, content: string, signatureUrl: string | null, fontSize: number): string {
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -592,7 +588,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!profile) {
       console.error(`[${requestId}] User profile not found for user_id:`, authenticatedUserId);
       // Debug: Try a direct query to see what's in the DB
-      const { data: allProfiles, error: debugError } = await supabase
+      const { data: allProfiles } = await supabase
         .from('user_profiles')
         .select('id, user_id, name')
         .limit(10);
@@ -1007,7 +1003,7 @@ Return JSON in this exact format:
     console.log(`[${requestId}] Generating HTML templates`);
     try {
       const resumeHtml = generateResumeHTML(profile, educationEntries || [], workEntries || [], aiResponse.selected_projects, aiResponse.extracted_skills, font_size);
-      const coverLetterHtml = generateCoverLetterHTML(profile, job_description, aiResponse.cover_letter, profile.signature_url, font_size);
+      const coverLetterHtml = generateCoverLetterHTML(profile, aiResponse.cover_letter, profile.signature_url, font_size);
 
       console.log(`[${requestId}] Incrementing generation counter`);
       await supabase

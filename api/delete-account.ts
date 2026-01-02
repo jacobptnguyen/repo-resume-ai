@@ -1,9 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
-
-const dotenvResult1 = dotenv.config({ path: '.env.local' });
-const dotenvResult2 = dotenv.config({ path: '.env' });
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
