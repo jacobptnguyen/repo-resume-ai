@@ -54,6 +54,7 @@ export const useAuth = () => {
 
   const signOut = async () => {
     try {
+      // Sign out from Supabase with both scopes to fully clear session
       const { error: localError } = await supabase.auth.signOut({ scope: 'local' });
       if (localError) {
         console.error('Error signing out locally:', localError);
@@ -64,15 +65,18 @@ export const useAuth = () => {
         console.error('Error signing out globally:', globalError);
       }
 
+      // Clear all browser storage
       localStorage.clear();
       sessionStorage.clear();
 
+      // Clear all cookies
       document.cookie.split(";").forEach((c) => {
         const eqPos = c.indexOf("=");
         const name = eqPos > -1 ? c.substr(0, eqPos).trim() : c.trim();
         document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
       });
 
+      // Redirect to the app's login page
       window.location.href = '/';
     } catch (err) {
       console.error('Logout error:', err);
