@@ -81,7 +81,14 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
       // Calculate PDF dimensions (A4: 210mm x 297mm)
       const pdfWidth = 210; // mm
       const pdfHeight = 297; // mm
-      const imgWidth = pdfWidth;
+      
+      // 1 inch = 25.4mm margins on all sides
+      const margin = 25.4; // mm
+      const contentWidth = pdfWidth - (2 * margin); // Account for left and right margins
+      const contentHeight = pdfHeight - (2 * margin); // Account for top and bottom margins
+      
+      // Scale image to fit within the content area (with margins)
+      const imgWidth = contentWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       // Create PDF in portrait orientation
@@ -92,9 +99,9 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
       });
 
       // Handle multi-page content
-      if (imgHeight > pdfHeight) {
+      if (imgHeight > contentHeight) {
         // Content spans multiple pages - use negative y positions to show different portions
-        const totalPages = Math.ceil(imgHeight / pdfHeight);
+        const totalPages = Math.ceil(imgHeight / contentHeight);
         const imageData = canvas.toDataURL('image/png');
 
         for (let i = 0; i < totalPages; i++) {
@@ -102,12 +109,13 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             pdf.addPage();
           }
           // Calculate y offset: negative value to show the appropriate portion of the image
-          const yOffset = -i * pdfHeight;
-          pdf.addImage(imageData, 'PNG', 0, yOffset, imgWidth, imgHeight);
+          // Add margin to account for top margin on each page
+          const yOffset = margin - (i * contentHeight);
+          pdf.addImage(imageData, 'PNG', margin, yOffset, imgWidth, imgHeight);
         }
       } else {
-        // Content fits on one page
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+        // Content fits on one page - position with 1 inch margin from top and left
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, margin, imgWidth, imgHeight);
       }
 
       // Download the PDF
@@ -127,7 +135,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Preview</h2>
         <div className="flex space-x-2">
@@ -146,7 +154,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Resume Preview */}
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           <div className="flex justify-between items-center mb-4">

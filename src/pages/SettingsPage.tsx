@@ -129,7 +129,7 @@ export const SettingsPage: React.FC = () => {
     : 'Not set';
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-4">
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
         <p className="text-gray-600">Manage your account and repository access.</p>

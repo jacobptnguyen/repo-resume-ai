@@ -211,7 +211,7 @@ export const RepoSelectionPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
+      <div className="mb-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Select Repositories</h1>
         <p className="text-gray-600">
           Choose which repositories RepoResume.ai can analyze to generate your resume.
@@ -219,13 +219,13 @@ export const RepoSelectionPage: React.FC = () => {
       </div>
 
       {repoError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <p className="text-red-600">{repoError}</p>
         </div>
       )}
 
       {repositories.length === 0 && !loadingRepos && !repoError && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-4">
           <p className="text-yellow-800">
             No repositories found. Make sure you have repositories in your GitHub account.
           </p>
@@ -242,7 +242,7 @@ export const RepoSelectionPage: React.FC = () => {
         />
       </div>
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-4 flex justify-end">
         <Button
           onClick={handleContinue}
           disabled={loading || (accessType === 'selected' && selectedRepoIds.length === 0)}

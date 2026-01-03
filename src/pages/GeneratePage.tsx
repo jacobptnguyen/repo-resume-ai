@@ -192,7 +192,7 @@ export const GeneratePage: React.FC = () => {
   const canGenerate = jobDescription.trim().length > 0 && !generationLoading && hasRepositories === true;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-4">
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Generate Resume & Cover Letter</h1>
         <p className="text-gray-600">
@@ -201,7 +201,7 @@ export const GeneratePage: React.FC = () => {
       </div>
 
       {!hasGeneratedContent && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-4">
           <JobDescriptionInput
             value={jobDescription}
             onChange={(value) => {
