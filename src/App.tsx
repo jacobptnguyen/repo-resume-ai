@@ -47,7 +47,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requireProfile?: boo
   }
 
   // Redirect to login if profile is required but doesn't exist
-  if (requireProfile && !profile) {
+  // IMPORTANT: Only redirect if profile is NOT LOADING and actually doesn't exist
+  if (requireProfile && !profileLoading && !profile) {
     // Sign out and redirect to login
     supabase.auth.signOut().then(() => {
       window.location.href = '/';
@@ -117,4 +118,3 @@ function App() {
 }
 
 export default App;
-
