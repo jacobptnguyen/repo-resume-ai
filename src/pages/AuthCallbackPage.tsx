@@ -8,22 +8,14 @@ export const AuthCallbackPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Wait for auth state to be set and validate it
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session) {
-        // Step 2: Validate the session by calling getUser()
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
-        if (userError || !user) {
-          console.error('OAuth callback - session invalid:', userError);
-          // Session is invalid, clear it and redirect to login
-          await supabase.auth.signOut({ scope: 'local' });
-          navigate('/');
-          return;
-        }
-        
+    let mounted = true;
+    let hasProcessed = false;
+
+    const processSession = async (user: any) => {
+      if (!mounted || hasProcessed) return;
+      hasProcessed = true;
+
+      try {
         // Auto-create user_profiles record immediately after login
         // This is CRITICAL - the app depends on this profile existing
         const githubUsername = user.user_metadata?.user_name || '';
@@ -95,13 +87,44 @@ export const AuthCallbackPage: React.FC = () => {
         if (!profileCreated) {
           const errorMessage = lastError?.message || 'Failed to create user profile after multiple attempts';
           console.error('Profile creation failed:', errorMessage);
-          setError(`Failed to create your profile: ${errorMessage}. Please try logging in again or contact support.`);
-          // Don't redirect - show error to user
+          if (mounted) {
+            setError(`Failed to create your profile: ${errorMessage}. Please try logging in again or contact support.`);
+          }
           return;
         }
 
+        // Clean up URL hash
+        window.history.replaceState({}, document.title, window.location.pathname);
+
         // Always redirect to repos page first
-        navigate('/repos', { replace: true });
+        if (mounted) {
+          navigate('/repos', { replace: true });
+        }
+      } catch (err) {
+        console.error('Error processing session:', err);
+        if (mounted) {
+          setError('An unexpected error occurred. Please try signing in again.');
+        }
+      }
+    };
+
+    // Wait for auth state to be set and validate it
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+        // Step 2: Validate the session by calling getUser()
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError || !user) {
+          console.error('OAuth callback - session invalid:', userError);
+          // Session is invalid, clear it and redirect to login
+          await supabase.auth.signOut({ scope: 'local' });
+          navigate('/');
+          return;
+        }
+        
+        await processSession(user);
       } else {
         navigate('/');
       }
