@@ -82,8 +82,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
       const pdfWidth = 210; // mm
       const pdfHeight = 297; // mm
       
-      // 1 inch = 25.4mm margins on all sides
-      const margin = 25.4; // mm
+      // 0.5 inch = 12.7mm margins on all sides
+      const margin = 12.7; // mm
       const contentWidth = pdfWidth - (2 * margin); // Account for left and right margins
       const contentHeight = pdfHeight - (2 * margin); // Account for top and bottom margins
       
@@ -114,7 +114,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           pdf.addImage(imageData, 'PNG', margin, yOffset, imgWidth, imgHeight);
         }
       } else {
-        // Content fits on one page - position with 1 inch margin from top and left
+        // Content fits on one page - position with 0.5 inch margin from top and left
         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, margin, imgWidth, imgHeight);
       }
 
