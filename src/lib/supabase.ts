@@ -8,12 +8,5 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables. Check .env.local file.');
 }
 
-// Configure Supabase client to prevent unnecessary refreshes on window focus
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false, // Only detect in callback page, not on every focus
-  },
-});
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
